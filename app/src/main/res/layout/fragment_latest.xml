@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+
+
+        <com.rrhostel.custom.CustomBoldTextView
+            android:id="@+id/tv_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Welcome Home!"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.rrhostel.custom.CustomBoldTextView
+            android:id="@+id/tv_lunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_home"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Daily Lunch start from 12:00 to 3."
+            android:textColor="@android:color/holo_green_dark"
+            android:textStyle="bold" />
+
+
+        <com.rrhostel.custom.CustomBoldTextView
+            android:id="@+id/tv_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_lunch"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="TestDemossd"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+
+        <com.rrhostel.custom.CustomRegularTextView
+            android:id="@+id/tv_meal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_notification"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Please check , if you can't take any meal !"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_meal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_meal"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_breakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:checked="true"
+                android:text="Breakfast"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/cb_Lunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="Lunch"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/cb_dinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dinner"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_meal1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_meal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/email_rounded_btn"
+                android:gravity="center"
+                android:text="Submit"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

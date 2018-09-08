@@ -1,3 +1,77 @@
 <resources>
     <string name="app_name">HostelApp</string>
+    <string name="FisrtText">My AMLI Welcome Home portal allows you to: Set up recurring or one time online payments using your U.S. checking or savings account, check your account information, check community events, and submit &amp; view non-emergency service requests. Register here or through the leasing office to gain access to your My AMLI Welcome Home resident portal. We know how busy life gets and how valuable your time is. We hope your My AMLI resident portal makes your life a little easier.</string>
+    <string name="SecText">If you’re already registered, just enter your user name and password to sign in.</string>
+
+    <string name="SignUpText">Sign Up</string>
+
+
+    <string name="demoText">Demo</string>
+    <!-- USER registration start-->
+    <string name="RegistrationFailedTitle">Failed</string>
+    <string name="RegistrationFailedMsg">Unable to register. Please try again</string>
+    <string name="RegisterSuccessfulTitle">Registered successfully</string>
+    <string name="RegistrationSuccessfulMsg">Congratulations! You registered successfully.</string>
+
+    <string name="RegisterFirstNameHint">First name</string>
+    <string name="RegisterLastNameHint">Last name</string>
+    <string name="LoginUserName">Full Name</string>
+    <string name="RegisterEmailHint">Email</string>
+    <string name="RegisterPasswordHint">Password</string>
+    <string name="RegisterMobileNo">Contact No</string>
+    <string name="RegisterConfirmPassword">Confirm Password</string>
+    <string name="RegisterReferralHint">Have referral code</string>
+    <string name="RegisterJoinBtnText">Join Now</string>
+    <string name="RegisterTermText">Terms of Use</string>
+    <string name="RegisterAlreadyAccountTxt">ALREADY HAVE ACCOUNT ? </string>
+    <string name="RegisterSignInTxt">&#160;SIGN IN</string>
+    <string name="RegisterContactUs">Contact Us</string>
+
+    <string name="RegisterUserNameTxt">Please enter full name</string>
+    <string name="RegisterEmptyEmail">Please enter email</string>
+    <string name="RegisterInvalidEmail">Please enter valid email</string>
+    <string name="RegisterEmptyPassword">Please enter password</string>
+    <string name="RegisterPasswordMinimumLength">Password Min length 5 characters </string>
+    <string name="RegisterEmptyConfirmPassword">Please reenter password</string>
+    <string name="RegisterPasswordMisMatch">Password mismatch</string>
+    <string name="RegisterTermAndCondition">Please accept terms and condition</string>
+
+    <string name="CreateAccountText">CREATE AN ACCOUNT</string>
+
+    <string name="skip">Skip</string>
+
+    <string name="LoginText">Login </string>
+    <!-- USER registration end-->
+
+    <string name="facebook">facebook</string>
+
+    <string name="google">google</string>
+
+    <string name="FrgotPasswordText">Forgot Password</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Welcome</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+
+    <string name="LatestText">LATEST</string>
+    <string name="ServiceRequestText">SERVICE REQUESTS</string>
+
 </resources>
