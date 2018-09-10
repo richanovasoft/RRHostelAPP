@@ -19,8 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
-            app:tabBackground="@color/colorWhite"
-            app:tabIndicatorColor="@color/colorBlack" />
+            android:background="@color/blue"
+            app:tabBackground="@color/blue"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorBlack"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorWhite"
+            app:tabTextAppearance="@style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/colorWhite" />
 
         <FrameLayout
             android:id="@+id/fragment_container"

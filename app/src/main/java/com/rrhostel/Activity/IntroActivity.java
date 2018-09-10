@@ -162,9 +162,7 @@ public class IntroActivity extends AppCompatActivity {
         }
     }
 
-    private void firstCheckLaunch() {
-        StorageUtils.putPref(this, Constant.PREF_FIRST_LAUNCH, true);
-    }
+
 
     private void changeStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

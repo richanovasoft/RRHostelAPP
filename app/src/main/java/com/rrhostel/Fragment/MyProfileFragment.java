@@ -2,28 +2,23 @@ package com.rrhostel.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
-import com.rrhostel.Activity.CalenderActivity;
-import com.rrhostel.Activity.ListViewActivity;
 import com.rrhostel.R;
 
-public class MyCommunityFragment extends Fragment {
+public class MyProfileFragment extends Fragment {
 
 
     private View mMainView;
     private Context mContext;
 
-    private RelativeLayout rl_plus;
 
-    public MyCommunityFragment() {
+    public MyProfileFragment() {
         // Required empty public constructor
     }
 
@@ -42,24 +37,8 @@ public class MyCommunityFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getActivity();
-        mMainView = inflater.inflate(R.layout.community_fragment, container, false);
-
-        init();
-
-
+        mMainView = inflater.inflate(R.layout.fragment_my_profile, container, false);
         return mMainView;
-
     }
 
-    private void init() {
-
-        rl_plus = mMainView.findViewById(R.id.rl_plus);
-        rl_plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, ListViewActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 }

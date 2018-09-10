@@ -2,6 +2,7 @@ package com.rrhostel.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.rrhostel.Activity.ServiceRequestFromActivity;
 import com.rrhostel.Adapters.ServiceRequestAdapter;
 import com.rrhostel.Bean.ServiceBean;
 import com.rrhostel.R;
@@ -27,6 +30,8 @@ public class ServiceRequestFragment extends Fragment {
     private ArrayList<ServiceBean> mServiceList;
     private Context mContext;
 
+
+    private RelativeLayout rl_plus;
 
     public ServiceRequestFragment() {
         // Required empty public constructor
@@ -55,6 +60,14 @@ public class ServiceRequestFragment extends Fragment {
     private void init() {
 
         mRecyclerView = (RecyclerView) mMainView.findViewById(R.id.rv_service_request);
+        rl_plus = mMainView.findViewById(R.id.rl_plus);
+        rl_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ServiceRequestFromActivity.class);
+                startActivity(intent);
+            }
+        });
         mServiceList = new ArrayList<>();
 
         setOderList();

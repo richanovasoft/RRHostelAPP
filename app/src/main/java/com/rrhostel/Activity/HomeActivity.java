@@ -13,11 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rrhostel.Fragment.HomeFragment;
 import com.rrhostel.Fragment.MyCommunityFragment;
+import com.rrhostel.Fragment.MyProfileFragment;
 import com.rrhostel.Fragment.PaymentRequestFragment;
 import com.rrhostel.R;
 import com.rrhostel.custom.CustomRegularTextView;
@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
                 fragment = new HomeFragment();
                 break;
             case R.id.nav_profile:
-                //fragment = new Menu2();
+                fragment = new MyProfileFragment();
                 break;
             case R.id.nav_community:
                 fragment = new MyCommunityFragment();
@@ -68,10 +69,19 @@ public class HomeActivity extends AppCompatActivity
                 fragment = new PaymentRequestFragment();
                 break;
 
+            case R.id.nav_change_password:
+                Intent intent1 = new Intent(HomeActivity.this, ChangePasswordActivity.class);
+                startActivity(intent1);
+                break;
+
+
+            case R.id.nav_chat:
+
+                break;
+
             case R.id.nav_logout:
                 Intent intent = new Intent(HomeActivity.this, IntroActivity.class);
                 startActivity(intent);
-                finish();
                 break;
         }
 
@@ -123,7 +133,22 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_notification:
+                handleNotificationButtonClick();
+                break;
+
+        }
         return super.onOptionsItemSelected(item);
+
+
+    }
+
+    public void handleNotificationButtonClick() {
+        Intent intent = new Intent(this, ServiceRequestActivity.class);
+        startActivity(intent);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

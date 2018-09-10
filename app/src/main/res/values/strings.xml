@@ -70,8 +70,13 @@
         completions."
     </string>
 
+    <string name="LoginUserNameTxt">Please enter email</string>
+    <string name="LoginUserNameWithEmailTxt">Please enter email</string>
+    <string name="LoginPasswordTxt">Please enter password</string>
 
     <string name="LatestText">LATEST</string>
     <string name="ServiceRequestText">SERVICE REQUESTS</string>
 
+
+    <string name="selectServices">Select Service</string>
 </resources>
