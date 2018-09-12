@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HostelApp</string>
+    <string name="app_name">R.R.Hostel</string>
     <string name="FisrtText">My AMLI Welcome Home portal allows you to: Set up recurring or one time online payments using your U.S. checking or savings account, check your account information, check community events, and submit &amp; view non-emergency service requests. Register here or through the leasing office to gain access to your My AMLI Welcome Home resident portal. We know how busy life gets and how valuable your time is. We hope your My AMLI resident portal makes your life a little easier.</string>
     <string name="SecText">If you’re already registered, just enter your user name and password to sign in.</string>
 
@@ -32,9 +32,11 @@
     <string name="RegisterInvalidEmail">Please enter valid email</string>
     <string name="RegisterEmptyPassword">Please enter password</string>
     <string name="RegisterPasswordMinimumLength">Password Min length 5 characters </string>
+    <string name="RegisterPasswordMinimumLength1">Please enter 10 digit mobile number </string>
     <string name="RegisterEmptyConfirmPassword">Please reenter password</string>
     <string name="RegisterPasswordMisMatch">Password mismatch</string>
     <string name="RegisterTermAndCondition">Please accept terms and condition</string>
+    <string name="backCountMsg">Press Back again to exit.</string>
 
     <string name="CreateAccountText">CREATE AN ACCOUNT</string>
 
@@ -71,6 +73,14 @@
     </string>
 
     <string name="LoginUserNameTxt">Please enter email</string>
+    <string name="LoginUserNameTxt1">Please enter name</string>
+    <string name="UserAddress">Please enter address</string>
+    <string name="UserAge">Please enter age</string>
+    <string name="UserPhoneNo">Please enter phone number</string>
+    <string name="UserRelativePhoneNo">Please enter phone number</string>
+    <string name="UserRelativeName">Please enter phone number</string>
+    <string name="UserRelativeRelationShip">Please enter relationship</string>
+    <string name="UserRelative">Please enter email</string>
     <string name="LoginUserNameWithEmailTxt">Please enter email</string>
     <string name="LoginPasswordTxt">Please enter password</string>
 
@@ -79,4 +89,25 @@
 
 
     <string name="selectServices">Select Service</string>
+
+    <string name="InternetErrorMsg">Please check your Internet connection.</string>
+    <string name="VolleyErrorMsg">Internal server error!Please try again in 5 minutes.</string>
+    <string name="ErrorMsg">Internal server error!Please try again in 5 minutes.</string>
+    <string name="WakeUpInternetConnectionMsg">Wake up your Connection!</string>
+    <string name="ServerIntenetMsg">Your internet seems too slow to reach our server</string>
+    <string name="TryAgainTxt">Try Again</string>
+
+    <string name="CancelText">Cancel</string>
+    <string name="DoneText">Reset</string>
+    <string name="OkText">OK</string>
+
+    <string name="SendText">Send</string>
+
+
+    <string name="PasswordNew">Please enter new password</string>
+    <string name="PasswordConfirm">Please enter confirm password</string>
+    <string name="PasswordOld">Please enter old password</string>
+
+    <string name="LoginFailedMsg">Unable to Login. Please try again</string>
+
 </resources>

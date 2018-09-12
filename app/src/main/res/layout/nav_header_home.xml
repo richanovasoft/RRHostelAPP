@@ -19,12 +19,13 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/ic_user_profile" />
 
-    <com.rrhostel.custom.CustomRegularTextView
+    <com.rrhostel.custom.CustomBoldTextView
         android:id="@+id/tv_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
+        android:textColor="@color/colorWhite"
         android:textSize="14sp" />
 
     <com.rrhostel.custom.CustomRegularTextView
@@ -32,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"
+        android:textColor="@color/colorWhite"
         android:textSize="14sp" />
 
 </LinearLayout>

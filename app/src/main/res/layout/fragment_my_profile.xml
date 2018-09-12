@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/LightSmokyColor">
 
 
     <ScrollView
@@ -26,6 +27,7 @@
                     android:id="@+id/card_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
                     android:visibility="visible"
                     card_view:cardBackgroundColor="@color/cardview_light_background"
                     card_view:cardCornerRadius="1dp"
@@ -98,11 +100,12 @@
                                 android:padding="7dp">
 
                                 <AutoCompleteTextView
-                                    android:id="@+id/password"
+                                    android:id="@+id/mobile_no"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Mobile No."
                                     android:inputType="phone"
+                                    android:maxLength="10"
                                     android:textCursorDrawable="@null"
                                     android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
@@ -147,6 +150,7 @@
                                 android:layout_marginTop="20dp"
                                 android:background="@drawable/round_btn_primary"
                                 android:text="Update Profile"
+                                android:textAllCaps="false"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="16sp" />
                         </LinearLayout>
@@ -158,6 +162,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
                     card_view:cardBackgroundColor="@color/cardview_light_background"
                     card_view:cardCornerRadius="1dp"
                     card_view:cardElevation="2dp"
@@ -246,6 +251,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="Mobile No."
                                     android:inputType="phone"
+                                    android:maxLength="10"
                                     android:textCursorDrawable="@null"
                                     android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
@@ -258,6 +264,7 @@
                                 android:layout_marginTop="20dp"
                                 android:background="@drawable/round_btn_primary"
                                 android:text="Update Contact info"
+                                android:textAllCaps="false"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="16sp" />
                         </LinearLayout>
@@ -269,4 +276,8 @@
         </RelativeLayout>
     </ScrollView>
 
+    <include
+        android:id="@+id/rl_progressBar"
+        layout="@layout/progress_bar_layout"
+        android:visibility="gone" />
 </RelativeLayout>

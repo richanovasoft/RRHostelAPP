@@ -86,6 +86,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/round_btn_primary"
                 android:text="@string/LoginText"
+                android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp" />
 
@@ -115,6 +116,11 @@
 
         </LinearLayout>
     </RelativeLayout>
+
+    <include
+        android:id="@+id/rl_progressBar"
+        layout="@layout/progress_bar_layout"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

@@ -122,6 +122,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/round_btn_primary"
                     android:text="Cancel"
+                    android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp" />
 
@@ -134,6 +135,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/round_btn_primary"
                     android:text="Submit"
+                    android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp" />
 
@@ -142,5 +144,11 @@
 
         </LinearLayout>
     </LinearLayout>
+
+
+    <include
+        android:id="@+id/rl_progressBar"
+        layout="@layout/progress_bar_layout"
+        android:visibility="gone" />
 
 </RelativeLayout>

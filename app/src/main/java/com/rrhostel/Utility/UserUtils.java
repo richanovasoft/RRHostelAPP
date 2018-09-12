@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
 import com.google.gson.Gson;
+import com.rrhostel.Bean.LoginResponce;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -57,10 +58,6 @@ public class UserUtils {
         StorageUtils.putPref(aContext, Constant.PREF_USER_ID, aUser);
     }
 
-    public void setTokenId(Context aContext, String aUser) {
-        StorageUtils.putPref(aContext, Constant.PREF_TOKEN_ID, aUser);
-    }
-
 
     public void setUserLoggedIn(Context aContext, boolean aLoggedIn) {
         StorageUtils.putPref(aContext, Constant.PREF_USER_LOGGED_IN, aLoggedIn);
@@ -74,27 +71,23 @@ public class UserUtils {
         return StorageUtils.getPrefStr(aContext, Constant.PREF_USER_ID);
     }
 
-    public String getTokenID(Context aContext) {
-        return StorageUtils.getPrefStr(aContext, Constant.PREF_TOKEN_ID);
-
-    }
 
     public void clearAll(Context aContext) {
         StorageUtils.clearPref(aContext, Constant.PREF_USER_LOGGED_IN);
         StorageUtils.clearPref(aContext, Constant.PREF_USER_INFO);
     }
 
-    public UserUtils getUserInfo(Context aContext) {
-        UserUtils userInfo = null;
+    public LoginResponce getUserInfo(Context aContext) {
+        LoginResponce userInfo = null;
         String jsonStr = StorageUtils.getPrefStr(aContext, Constant.PREF_USER_INFO);
         if (jsonStr != null && jsonStr.length() > 1) {
             Gson gson = new Gson();
-            userInfo = gson.fromJson(jsonStr, UserUtils.class);
+            userInfo = gson.fromJson(jsonStr, LoginResponce.class);
         }
         return userInfo;
     }
 
-    public void saveUserInfo(Context aContext, UserUtils aUserInfo) {
+    public void saveUserInfo(Context aContext, LoginResponce aUserInfo) {
         Gson gson = new Gson();
         String jsonInString = gson.toJson(aUserInfo);
         if (jsonInString != null) {

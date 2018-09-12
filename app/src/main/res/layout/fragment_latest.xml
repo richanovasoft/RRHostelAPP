@@ -40,7 +40,7 @@
             android:layout_below="@+id/tv_lunch"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="TestDemossd"
+            android:text=""
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
@@ -74,7 +74,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:checked="true"
                 android:text="Breakfast"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
@@ -107,16 +106,21 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_submit"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="38dp"
                 android:background="@drawable/round_btn_primary"
                 android:gravity="center"
                 android:text="Submit"
                 android:textAlignment="center"
+                android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </RelativeLayout>
 
+    <include
+        android:id="@+id/rl_progressBar"
+        layout="@layout/progress_bar_layout"
+        android:visibility="gone" />
 </RelativeLayout>
