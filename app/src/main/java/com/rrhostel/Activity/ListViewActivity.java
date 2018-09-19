@@ -59,7 +59,6 @@ public class ListViewActivity extends AppCompatActivity implements OnClickListen
         CalendarCollection.date_collection_arr.add(new CalendarCollection("2018-05-02", "Marriage Anniversary"));
         CalendarCollection.date_collection_arr.add(new CalendarCollection("2018-04-07", "Live Event and Concert of sonu"));
 
-
         getWidget();
     }
 
@@ -69,7 +68,7 @@ public class ListViewActivity extends AppCompatActivity implements OnClickListen
         btn_calender.setOnClickListener(this);
 
         lv_android = (ListView) findViewById(R.id.lv_android);
-        list_adapter = new AndroidListAdapter(ListViewActivity.this, R.layout.list_item, CalendarCollection.date_collection_arr);
+       // list_adapter = new AndroidListAdapter(ListViewActivity.this, R.layout.list_item, CalendarCollection.date_collection_arr);
         lv_android.setAdapter(list_adapter);
 
     }

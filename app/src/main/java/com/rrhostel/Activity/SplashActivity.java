@@ -1,8 +1,12 @@
 package com.rrhostel.Activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -13,6 +17,7 @@ import com.rrhostel.Utility.StorageUtils;
 public class SplashActivity extends AppCompatActivity {
 
     private Context mContext;
+    public static final int RequestPermissionCode = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +31,20 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                gotoMain();
+                handleSplashTimeout();
             }
         }, Constant.SPLASH_TIME_OUT);
+    }
+
+    private void handleSplashTimeout() {
+
+        gotoMain();
+
+
+        /*if (CheckingPermissionIsEnabledOrNot()) {
+        } else {
+            RequestMultiplePermission();
+        }*/
     }
 
     private void gotoMain() {
@@ -55,4 +71,49 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public boolean CheckingPermissionIsEnabledOrNot() {
+
+        int ForthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CALENDAR);
+        int FifthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CALENDAR);
+
+        return ForthPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    private void RequestMultiplePermission() {
+
+        // Creating String Array with Permissions.
+        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR,
+        }, RequestPermissionCode);
+
+    }
+
+    // Calling override method.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case RequestPermissionCode:
+
+                if (grantResults.length > 0) {
+
+                    boolean GetAccountsPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean GetLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if ( GetAccountsPermission && GetLocation) {
+
+                        gotoMain();
+                    } else {
+                        finish();
+                    }
+                }
+
+                break;
+        }
+    }
+
 }

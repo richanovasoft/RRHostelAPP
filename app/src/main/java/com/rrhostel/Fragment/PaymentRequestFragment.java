@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.Adapters.PaymentRequestAdapter;
 import com.rrhostel.Bean.PaymentBean;
 import com.rrhostel.Bean.ServiceBean;
@@ -71,6 +72,7 @@ public class PaymentRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_payment_request, container, false);
+        ((HomeActivity) getActivity()).setTitle("Payment");
         init();
         return mMainView;
     }

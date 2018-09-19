@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.R;
 
 
@@ -44,6 +45,9 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        ((HomeActivity) getActivity()).setTitle("R.R.Hostel");
+
         getAllWidgets();
         bindWidgetsWithAnEvent();
         setupTabLayout();

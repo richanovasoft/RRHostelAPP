@@ -56,7 +56,7 @@ public class CalenderActivity extends AppCompatActivity {
 
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
-        cal_adapter = new CalendarAdapter(this, cal_month, CalendarCollection.date_collection_arr);
+        cal_adapter = new CalendarAdapter(this, cal_month);
 
 
         tv_month = (TextView) findViewById(R.id.tv_month);
@@ -92,7 +92,7 @@ public class CalenderActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
+               /* ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
                 String selectedGridDate = CalendarAdapter.day_string
                         .get(position);
 
@@ -109,8 +109,8 @@ public class CalenderActivity extends AppCompatActivity {
                 }
                 ((CalendarAdapter) parent.getAdapter()).setSelected(v, position);
 
-
-                ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, CalenderActivity.this);
+*/
+                //((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, CalenderActivity.this);
             }
 
         });
@@ -144,7 +144,7 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     public void refreshCalendar() {
-        cal_adapter.refreshDays();
+        //cal_adapter.refreshDays();
         cal_adapter.notifyDataSetChanged();
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
     }

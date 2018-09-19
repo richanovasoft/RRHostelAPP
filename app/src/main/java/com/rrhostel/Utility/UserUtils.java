@@ -59,6 +59,15 @@ public class UserUtils {
     }
 
 
+    public void setFirebaseUID(Context aContext, String aUser) {
+        StorageUtils.putPref(aContext, Constant.PREF_USER_INFO_FIREBASE_USER_ID, aUser);
+    }
+
+    public String getFireBaseUID(Context aContext) {
+        return StorageUtils.getPrefStr(aContext, Constant.PREF_USER_INFO_FIREBASE_USER_ID);
+    }
+
+
     public void setUserLoggedIn(Context aContext, boolean aLoggedIn) {
         StorageUtils.putPref(aContext, Constant.PREF_USER_LOGGED_IN, aLoggedIn);
     }

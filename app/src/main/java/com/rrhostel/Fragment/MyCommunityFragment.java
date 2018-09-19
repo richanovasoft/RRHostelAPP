@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.rrhostel.Activity.CalenderActivity;
-import com.rrhostel.Activity.ListViewActivity;
 import com.rrhostel.R;
+import com.rrhostel.Utility.CalendarView;
 
 public class MyCommunityFragment extends Fragment {
 
@@ -57,7 +57,7 @@ public class MyCommunityFragment extends Fragment {
         rl_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ListViewActivity.class);
+                Intent intent = new Intent(mContext, CalendarView.class);
                 startActivity(intent);
             }
         });

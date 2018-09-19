@@ -56,6 +56,13 @@ public class LoginResponce {
     @SerializedName("status")
     private String mStatus;
 
+
+    @SerializedName("firebaseRegistrationId")
+    private String firebaseRegistrationId;
+
+    @SerializedName("deviceId")
+    private String deviceId;
+
     public String getAddress() {
         return mAddress;
     }
@@ -191,5 +198,21 @@ public class LoginResponce {
 
     public void setmStatus(String mStatus) {
         this.mStatus = mStatus;
+    }
+
+    public String getFirebaseRegistrationId() {
+        return firebaseRegistrationId;
+    }
+
+    public void setFirebaseRegistrationId(String firebaseRegistrationId) {
+        this.firebaseRegistrationId = firebaseRegistrationId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

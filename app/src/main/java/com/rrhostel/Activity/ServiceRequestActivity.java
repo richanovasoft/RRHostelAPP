@@ -28,6 +28,7 @@ import com.rrhostel.Bean.ServiceBean;
 import com.rrhostel.R;
 import com.rrhostel.Utility.AppController;
 import com.rrhostel.Utility.Constant;
+import com.rrhostel.Utility.StorageUtils;
 import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
@@ -167,6 +168,8 @@ public class ServiceRequestActivity extends AppCompatActivity {
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setAdapter(mServiceAdapter);
             mRecyclerView.setNestedScrollingEnabled(false);
+            StorageUtils.putPref(getApplicationContext(), Constant.NOTIFICATION_COUNTER_VALUE_KEY, 0);
+
         }
 
     }

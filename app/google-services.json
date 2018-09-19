@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "605085449254",
+    "firebase_url": "https://hostelportal-58b2e.firebaseio.com",
+    "project_id": "hostelportal-58b2e",
+    "storage_bucket": "hostelportal-58b2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605085449254:android:b03a6921605412b1",
+        "android_client_info": {
+          "package_name": "com.rrhostel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605085449254-7mfakq9evcfqnerdmmbaeh1uv0rhlifs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rrhostel",
+            "certificate_hash": "97eb11d116f1504561dafc206459645c885f6f07"
+          }
+        },
+        {
+          "client_id": "605085449254-hafi8o7f8n5kja0q6ifknucb5n02inpg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoK7Nw45mAJqMQw7c-7q_rb64kYbaE-_k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605085449254-hafi8o7f8n5kja0q6ifknucb5n02inpg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

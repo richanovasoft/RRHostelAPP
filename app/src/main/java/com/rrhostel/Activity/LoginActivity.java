@@ -1,11 +1,17 @@
 package com.rrhostel.Activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -23,6 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.rrhostel.Bean.LoginResponce;
 import com.rrhostel.R;
 import com.rrhostel.Utility.AppController;
@@ -31,20 +48,15 @@ import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
@@ -70,6 +82,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private int BackCount = Constant.APPLICATION_BACK_COUNT;
 
+    private String android_id, refreshedToken;
+
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+    public FirebaseAuth firebaseAuth;
+
+    DatabaseReference databaseReference;
+    String Database_Path = "All_UserName_Database";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
         changeStatusBarColor();
         mContext = this;
+
 
         mEmailView = findViewById(R.id.email);
         ll_forgot = findViewById(R.id.ll_forgot);
@@ -95,6 +116,11 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
 
         mProgressBarLayout = findViewById(R.id.rl_progressBar);
 
@@ -115,6 +141,49 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    displayFirebaseRegId();
+
+                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+                    String message = intent.getStringExtra(Constant.INTENT_NOTIFICATION_MSG);
+                    String id = intent.getStringExtra(Constant.INTENT_NOTIFICATION_ID);
+                    String imageUrl = intent.getStringExtra(Constant.INTENT_NOTIFICATION_IMAGE_URL);
+                    String title = intent.getStringExtra(Constant.INTENT_NOTIFICATION_TITLE);
+                    //AppData.getInstance().showDialog(SplashActivity.this, title, message, imageUrl, type, id);
+                }
+            }
+        };
+
+        displayFirebaseRegId();
+
+    }
+
+
+    private void displayFirebaseRegId() {
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Constant.SHARED_PREF_FIREBASE_KEY, 0);
+        String refreshedToken1 = pref.getString("regId", null);
+
+        if (!TextUtils.isEmpty(refreshedToken1) || refreshedToken1 != null) {
+
+            refreshedToken = refreshedToken1;
+            System.out.println("????regId = " + refreshedToken);
+
+
+        } else {
+            refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("regId", refreshedToken);
+            editor.commit();
+        }
     }
 
     private void changeStatusBarColor() {
@@ -165,19 +234,203 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             //Call API for Login
 
+
             startHttpRequestForLoginAPI();
 
+        }
+    }
 
+
+    private void setEmailIntegrationUsingFireBase(final String aStrEmail, String aStrPassword, final LoginResponce loginResponseData) {
+
+        //Userd for hide keyboard
+        UIUtils.hideKeyBoard(LoginActivity.this);
+        showProgressBar();
+        firebaseAuth.createUserWithEmailAndPassword(aStrEmail, aStrPassword)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //Toast.makeText(mContext, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            try {
+                                throw task.getException();
+                            }
+                            // if user enters wrong password.
+                            catch (FirebaseAuthInvalidCredentialsException malformedEmail) {
+                                hideProgressBar();
+
+                                /*new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setMessage("Enter the correct email.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();*/
+                            } catch (FirebaseAuthUserCollisionException existEmail) {
+                                hideProgressBar();
+
+                                /*new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setMessage("This email id is already exists.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+
+*/
+                                setEmailIntegration(mEmailView.getText().toString(), "novasoft@12345",loginResponseData);
+
+
+                            } catch (Exception e) {
+                                hideProgressBar();
+                               /* new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setTitle("Error")
+                                        .setMessage("Internal server error!Please try again in 5 minutes.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();*/
+                            }
+                        } else {
+                            FirebaseUser user = task.getResult().getUser();
+
+                            if (user != null) {
+                                DatabaseReference current_user = databaseReference.child(user.getUid());
+                                // DatabaseReference current_user1 = databaseReference1.child(user.getEmail());
+                                current_user.child("Email").setValue(aStrEmail);
+                                current_user.child("firebase_user_id").setValue(user.getUid());
+
+                                setEmailIntegration(mEmailView.getText().toString(), "novasoft@12345", loginResponseData);
+
+                            }
+                        }
+                    }
+                });
+
+    }
+
+
+    private void setEmailIntegration(String aEmail, String aLoginPassword, final LoginResponce loginResponseData) {
+
+        firebaseAuth.signInWithEmailAndPassword(aEmail, aLoginPassword)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        hideProgressBar();
+
+
+                        //if the task is successfull
+                        if (task.isSuccessful()) {
+
+
+                            //For Email varification(using firebase)
+
+                            checkIfEmailVerified(loginResponseData);
+                        } else {
+
+                            try {
+                                throw task.getException();
+
+                            }
+                            // if user enters wrong email.
+                            catch (FirebaseAuthInvalidUserException invalidEmail) {
+                                hideProgressBar();
+                                /*new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setMessage("Enter the correct email.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();*/
+
+                                // TODO: take your actions!
+                            }
+                            // if user enters wrong password.
+                            catch (FirebaseAuthInvalidCredentialsException wrongPassword) {
+                                hideProgressBar();
+                                /*new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setMessage("Enter the correct password.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();*/
+
+                                // TODO: Take your action
+                            } catch (Exception e) {
+                                hideProgressBar();
+                               /* new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                        .setMessage("Account is not verified!please create your account.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();*/
+                            }
+
+                        }
+                    }
+                });
+
+    }
+
+    private void checkIfEmailVerified(LoginResponce loginResponseData) {
+
+        //Check for Firebase Authentication User
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if (user != null) {
+
+            //API used for get user info
+            loginSuccessfully(loginResponseData,user.getUid());
+
+
+        } else {
+            // email is not verified, so just prompt the message to the user and restart this activity.
+            // NOTE: don't forget to log out the user.
+            // FirebaseAuth.getInstance().signOut();
+
+            //restart this activity
+
+            hideProgressBar();
+            /*new android.app.AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                    .setMessage(getString(R.string.LoginFailedMsg))
+                    .setCancelable(false)
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    }).show();*/
         }
     }
 
     private void startHttpRequestForLoginAPI() {
 
-
         boolean internetAvailable = Utils.isConnectingToInternet(LoginActivity.this);
 
         if (internetAvailable) {
             mIsRequestInProgress = true;
+
+            android_id = Settings.System.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+
             String baseUrl = Constant.API_LOGIN;
             showProgressBar();
             StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
@@ -213,7 +466,9 @@ public class LoginActivity extends AppCompatActivity {
                                     if (loginResponseData != null) {
                                         hideProgressBar();
 
-                                        loginSuccessfully(loginResponseData);
+
+                                        setEmailIntegrationUsingFireBase(mEmailView.getText().toString(), "novasoft@12345",loginResponseData);
+
 
                                     } else {
 
@@ -245,7 +500,6 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }).show();
                             }
-
                         }
                     },
                     new Response.ErrorListener() {
@@ -276,6 +530,8 @@ public class LoginActivity extends AppCompatActivity {
                     HashMap<String, String> params = new HashMap<>();
                     params.put(Constant.LOGIN_USERNAME_KEY, mEmailView.getText().toString());
                     params.put(Constant.LOGIN_PASSWORD_KEY, mPasswordView.getText().toString().trim());
+                    params.put("deviceId", android_id);
+                    params.put("firebaseRegistrationId", refreshedToken);
                     return params;
                 }
             };
@@ -287,16 +543,19 @@ public class LoginActivity extends AppCompatActivity {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         } else {
-            // UIUtils.showToast(mContext, getString(R.string.InternetErrorMsg));
+            UIUtils.showToast(mContext, getString(R.string.InternetErrorMsg));
         }
 
     }
 
 
-    private void loginSuccessfully(LoginResponce aLoginResponseObj) {
+    private void loginSuccessfully(LoginResponce aLoginResponseObj, String uid) {
+
+
         UserUtils.getInstance().setUserLoggedIn(mContext, true);
         UserUtils.getInstance().saveUserInfo(mContext, aLoginResponseObj);
         UserUtils.getInstance().setUserId(mContext, aLoginResponseObj.getUserId());
+        UserUtils.getInstance().setFirebaseUID(mContext, uid);
 
         Intent intent = new Intent(mContext, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -344,6 +603,29 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.backCountMsg), Toast.LENGTH_SHORT).show();
             BackCount++;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        displayFirebaseRegId();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.PUSH_NOTIFICATION));
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
 }

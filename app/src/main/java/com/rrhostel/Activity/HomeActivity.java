@@ -1,10 +1,14 @@
 package com.rrhostel.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,35 +20,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.rrhostel.Bean.LoginResponce;
-import com.rrhostel.Bean.ServiceBean;
+import com.rrhostel.Chat.MessageActivity;
 import com.rrhostel.Fragment.HomeFragment;
 import com.rrhostel.Fragment.MyCommunityFragment;
 import com.rrhostel.Fragment.MyProfileFragment;
 import com.rrhostel.Fragment.PaymentRequestFragment;
 import com.rrhostel.R;
-import com.rrhostel.Utility.AppController;
 import com.rrhostel.Utility.Constant;
-import com.rrhostel.Utility.UIUtils;
+import com.rrhostel.Utility.StorageUtils;
 import com.rrhostel.Utility.UserUtils;
-import com.rrhostel.Utility.Utils;
 import com.rrhostel.custom.CustomBoldTextView;
 import com.rrhostel.custom.CustomRegularTextView;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,11 +44,18 @@ public class HomeActivity extends AppCompatActivity
     private CustomBoldTextView mEtName;
     private CustomRegularTextView mNotificationCountTv;
 
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private CustomBoldTextView action_toolbar_name;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        action_toolbar_name = toolbar.findViewById(R.id.action_toolbar_name);
+
+        action_toolbar_name.setText("Tarah");
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
@@ -92,7 +86,28 @@ public class HomeActivity extends AppCompatActivity
             mEtEmail.setVisibility(View.GONE);
         }
 
-        startHttpRequestForServiceRequest();
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Constant.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                } else if (intent.getAction().equals(Constant.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+                    String message = intent.getStringExtra(Constant.INTENT_NOTIFICATION_MSG);
+                    String id = intent.getStringExtra(Constant.INTENT_NOTIFICATION_ID);
+                    String imageUrl = intent.getStringExtra(Constant.INTENT_NOTIFICATION_IMAGE_URL);
+                    String title = intent.getStringExtra(Constant.INTENT_NOTIFICATION_TITLE);
+                    //AppData.getInstance().showDialog(SplashActivity.this, title, message, imageUrl, type, id);
+                }
+            }
+        };
+
+
         displaySelectedScreen(R.id.nav_home);
     }
 
@@ -125,12 +140,16 @@ public class HomeActivity extends AppCompatActivity
 
 
             case R.id.nav_chat:
-
+                Intent intent2 = new Intent(HomeActivity.this, MessageActivity.class);
+                startActivity(intent2);
                 break;
 
             case R.id.nav_logout:
-                Intent intent = new Intent(HomeActivity.this, IntroActivity.class);
+                UserUtils.getInstance().clearAll(HomeActivity.this);
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
                 break;
         }
 
@@ -166,8 +185,9 @@ public class HomeActivity extends AppCompatActivity
         final MenuItem item = menu.findItem(R.id.action_notification);
 
         mNotificationCountTv = item.getActionView().findViewById(R.id.tv_notification_count);
-        mNotificationCountTv.setVisibility(View.GONE);
-
+        if (mNotificationCountTv != null) {
+            mNotificationCountTv.setVisibility(View.GONE);
+        }
 
         item.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +195,28 @@ public class HomeActivity extends AppCompatActivity
                 m.performIdentifierAction(item.getItemId(), 0);
             }
         });
+
+        updateNotificationValue();
         return true;
+    }
+
+    public void setTitle(String title) {
+        action_toolbar_name.setText(title);
+    }
+
+    private void updateNotificationValue() {
+
+        if (mNotificationCountTv != null) {
+            int count = StorageUtils.getPrefForCount(HomeActivity.this, Constant.NOTIFICATION_COUNTER_VALUE_KEY);
+            if (count == 0) {
+                mNotificationCountTv.setText(" " + count + " ");
+                mNotificationCountTv.setVisibility(View.GONE);
+            } else {
+                mNotificationCountTv.setText(" " + count + " ");
+                mNotificationCountTv.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     @Override
@@ -186,11 +227,8 @@ public class HomeActivity extends AppCompatActivity
             case R.id.action_notification:
                 handleNotificationButtonClick();
                 break;
-
         }
         return super.onOptionsItemSelected(item);
-
-
     }
 
     public void handleNotificationButtonClick() {
@@ -218,69 +256,30 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    private void startHttpRequestForServiceRequest() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.REGISTRATION_COMPLETE));
 
-        boolean internetAvailable = Utils.isConnectingToInternet(HomeActivity.this);
-        if (internetAvailable) {
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Constant.PUSH_NOTIFICATION));
 
-            String baseUrl = Constant.API_SERVICE_REQUEST;
-            StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                Gson gson = new Gson();
-                                Type listType = new TypeToken<List<ServiceBean>>() {
-                                }.getType();
-                                ArrayList<ServiceBean> posts = gson.fromJson(response, listType);
-                                if (posts != null && posts.size() > 0) {
-                                    setCountList(posts);
-                                } else {
-
-
-                                }
-
-                            } catch (Exception e) {
-
-
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            if (error.getClass().equals(NoConnectionError.class)) {
-
-                            } else {
-
-                            }
-                        }
-                    }) {
-                @Override
-                public Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("userId", UserUtils.getInstance().getUserID(HomeActivity.this));
-                    return params;
-                }
-            };
-            mStrRequest.setShouldCache(false);
-            mStrRequest.setTag("");
-            AppController.getInstance().addToRequestQueue(mStrRequest);
-            mStrRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    10000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        if (mNotificationCountTv != null) {
+            updateNotificationValue();
         }
 
     }
 
-    private void setCountList(ArrayList<ServiceBean> posts) {
-        if (posts.size() > 0) {
-            mNotificationCountTv.setVisibility(View.VISIBLE);
-            mNotificationCountTv.setText("" + posts.size());
 
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
 }

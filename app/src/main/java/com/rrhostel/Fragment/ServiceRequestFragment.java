@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.Activity.ServiceRequestFromActivity;
 import com.rrhostel.Adapters.ServiceRequestAdapter;
 import com.rrhostel.Bean.ServiceBean;
@@ -75,6 +76,7 @@ public class ServiceRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_service_request, container, false);
+
         init();
         return mMainView;
     }
@@ -137,7 +139,7 @@ public class ServiceRequestFragment extends Fragment {
                             if (error.getClass().equals(NoConnectionError.class)) {
                                 mRecyclerView.setVisibility(View.GONE);
                             } else {
-                                UIUtils.showToast(mContext, getResources().getString(R.string.VolleyErrorMsg));
+                                UIUtils.showToast(mContext, mContext.getResources().getString(R.string.VolleyErrorMsg));
                             }
                         }
                     }) {
@@ -156,7 +158,7 @@ public class ServiceRequestFragment extends Fragment {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         } else {
-            UIUtils.showToast(mContext, getResources().getString(R.string.InternetErrorMsg));
+            UIUtils.showToast(mContext, mContext.getResources().getString(R.string.InternetErrorMsg));
             mRecyclerView.setVisibility(View.GONE);
         }
 

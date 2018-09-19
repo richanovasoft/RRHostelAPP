@@ -22,6 +22,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -55,6 +59,10 @@ public class MyProfileFragment extends Fragment {
     private AutoCompleteTextView name_emergency, relationship, mobile_no_emergency, email_emergency;
     private Button btn_update, btn_update_emergency;
 
+    //DatabaseReference databaseReference;
+    // String Database_Path = "All_UserName_Database";
+
+    // public FirebaseAuth firebaseAuth;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -76,11 +84,18 @@ public class MyProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        ((HomeActivity) getActivity()).setTitle("My profile");
+
         init();
         return mMainView;
     }
 
     private void init() {
+
+        //databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
+
+        // firebaseAuth = FirebaseAuth.getInstance();
 
 
         mProgressBarLayout = mMainView.findViewById(R.id.rl_progressBar);
@@ -131,14 +146,28 @@ public class MyProfileFragment extends Fragment {
 
         UIUtils.hideKeyBoard(getActivity());
         if (ValidatorUtils.NotEmptyValidator(mContext, name_emergency, true, getString(R.string.UserRelativeName))
-                && ValidatorUtils.EmailValidator(mContext, relationship, true, getString(R.string.UserRelativeRelationShip))
+                && ValidatorUtils.NotEmptyValidator(mContext, relationship, true, getString(R.string.UserRelativeRelationShip))
                 && ValidatorUtils.NotEmptyValidator(mContext, email_emergency, true, getString(R.string.LoginUserNameTxt))
-                && ValidatorUtils.EmailValidator(mContext, email_emergency, true, getString(R.string.RegisterInvalidEmail))
+                && ValidatorUtils.NotEmptyValidator(mContext, email_emergency, true, getString(R.string.RegisterInvalidEmail))
                 && ValidatorUtils.EmailValidator(mContext, mobile_no_emergency, true, getString(R.string.UserRelativePhoneNo))
                 && ValidatorUtils.MinimumLengthValidator(mContext, mobile_no_emergency, 10, true,
                 getString(R.string.RegisterPasswordMinimumLength1))) {
 
+
+
+        /*    FirebaseUser user = task.getResult().getUser();
+
+            if (user != null) {
+                DatabaseReference current_user = databaseReference.child(user.getUid());
+                // DatabaseReference current_user1 = databaseReference1.child(user.getEmail());
+                current_user.child("Email").setValue(aStrEmail);
+                current_user.child("firebase_user_id").setValue(user.getUid());
+
+
+            }*/
+
             startHttpRequestForEmergencyDetailed();
+
 
         }
 
@@ -151,7 +180,7 @@ public class MyProfileFragment extends Fragment {
 
         if (internetAvailable) {
             mIsRequestInProgress = true;
-            String baseUrl = Constant.API_UPDATE_PROFILE;
+            String baseUrl = Constant.API_UPDATE_PROFILE_RELATION;
             showProgressBar();
             StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
                     new Response.Listener<String>() {
@@ -276,11 +305,11 @@ public class MyProfileFragment extends Fragment {
 
                 && ValidatorUtils.NotEmptyValidator(mContext, mEtEmail, true, getString(R.string.LoginUserNameWithEmailTxt))
                 && ValidatorUtils.EmailValidator(mContext, mEtEmail, true, getString(R.string.RegisterInvalidEmail))
-                && ValidatorUtils.EmailValidator(mContext, mEtPhoneNo, true, getString(R.string.UserPhoneNo))
+                && ValidatorUtils.NotEmptyValidator(mContext, mEtPhoneNo, true, getString(R.string.UserPhoneNo))
                 && ValidatorUtils.MinimumLengthValidator(mContext, mEtPhoneNo, 10, true,
                 getString(R.string.RegisterPasswordMinimumLength1))
-                && ValidatorUtils.EmailValidator(mContext, mEtAddress, true, getString(R.string.UserAddress))
-                && ValidatorUtils.EmailValidator(mContext, mEtAge, true, getString(R.string.UserAge))) {
+                && ValidatorUtils.NotEmptyValidator(mContext, mEtAddress, true, getString(R.string.UserAddress))
+                && ValidatorUtils.NotEmptyValidator(mContext, mEtAge, true, getString(R.string.UserAge))) {
 
             startHttpRequestForUpdateProfile();
 

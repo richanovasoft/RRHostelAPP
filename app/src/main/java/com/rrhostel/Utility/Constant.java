@@ -20,6 +20,47 @@ public class Constant {
     public static final String PREF_FIRST_LAUNCH = "skipIntro";
     public static final String PREF_SKIP_USER_ACCESS = "skipAccess";
 
+    public static final String NOTIFICATION_COUNTER_VALUE_KEY = "notify_counter";
+
+    public static final String PREF_USER_INFO_FIREBASE_USER_ID = "firebase_uid";
+
+    public static final String SHARED_PREF_FIREBASE_KEY = "ah_firebase";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String TOPIC_GLOBAL = "global";
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+    public static final String NOTIFICATION_TYPE_KEY = "type";
+    public static final String NOTIFICATION_ID_KEY = "id";
+    public static final String NOTIFICATION_TITLE_KEY = "title";
+    public static final String NOTIFICATION_MSG_KEY = "body";
+    public static final String NOTIFICATION_IMAGE_URL_KEY = "image";
+    public static final String INTENT_NOTIFICATION_TYPE = "type";
+    public static final String INTENT_NOTIFICATION_ID = "id";
+    public static final String INTENT_NOTIFICATION_TITLE = "title";
+    public static final String INTENT_NOTIFICATION_MSG = "message";
+    public static final String INTENT_NOTIFICATION_IMAGE_URL = "image";
+
+
+
+
+    public static int REQUEST_CODE_REGISTER = 2000;
+    public static String STR_EXTRA_ACTION_LOGIN = "login";
+    public static String STR_EXTRA_ACTION_RESET = "resetpass";
+    public static String STR_EXTRA_ACTION = "action";
+    public static String STR_EXTRA_USERNAME = "username";
+    public static String STR_EXTRA_PASSWORD = "password";
+    public static String STR_DEFAULT_BASE64 = "default";
+    public static String UID = "";
+    //TODO only use this UID for debug mode
+//    public static String UID = "6kU0SbJPF5QJKZTfvW1BqKolrx22";
+    public static String INTENT_KEY_CHAT_FRIEND = "friendname";
+    public static String INTENT_KEY_CHAT_AVATA = "friendavata";
+    public static String INTENT_KEY_CHAT_ID = "friendid";
+    public static String INTENT_KEY_CHAT_ROOM_ID = "roomid";
+    public static long TIME_TO_REFRESH = 10 * 1000;
+    public static long TIME_TO_OFFLINE = 2 * 60 * 1000;
+
+
+
 
     public static final String LOGIN_USERNAME_KEY = "email";
     public static final String LOGIN_PASSWORD_KEY = "password";
@@ -67,5 +108,8 @@ public class Constant {
     private static final String UPDATE_PROFILE_RELATION = "/emergencyUpdateApi.php";
     public static final String API_UPDATE_PROFILE_RELATION = API_BASE_URL + UPDATE_PROFILE_RELATION;
 
+
+    private static final String EVENT_LIST = "/eventApi.php";
+    public static final String API_EVENT_LIST = API_BASE_URL + EVENT_LIST;
 
 }

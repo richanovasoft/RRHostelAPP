@@ -68,4 +68,9 @@
         <item name="actionMenuTextColor">@color/colorWhite</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+
+    <style name="EditTextTintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimaryDark">#0288D1</item>
+    </style>
 </resources>

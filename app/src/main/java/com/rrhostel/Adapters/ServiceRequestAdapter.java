@@ -53,11 +53,10 @@ public class ServiceRequestAdapter extends RecyclerView.Adapter<ServiceRequestAd
             status = "Completed";
         }
 
-        holder.tv_service1.setText(curBean.getServiceList() + " (" + status + " )");
+        holder.tv_service1.setText(curBean.getServiceList() + " (" + status + ")");
         holder.tv_service2.setText(curBean.getProblemDescription());
         holder.tv_service3.setText(curBean.getPreferDate());
         holder.tv_service4.setText(curBean.getPreferTime());
-
 
     }
 
