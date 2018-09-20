@@ -85,7 +85,7 @@ public class MyProfileFragment extends Fragment {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
-        ((HomeActivity) getActivity()).setTitle("My profile");
+        ((HomeActivity) mContext).setTitle("My profile");
 
         init();
         return mMainView;

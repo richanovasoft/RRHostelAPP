@@ -72,7 +72,7 @@ public class PaymentRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_payment_request, container, false);
-        ((HomeActivity) getActivity()).setTitle("Payment");
+        ((HomeActivity) mContext).setTitle("Payment");
         init();
         return mMainView;
     }

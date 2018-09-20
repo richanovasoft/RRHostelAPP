@@ -44,6 +44,8 @@ import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
 import com.rrhostel.Utility.ValidatorUtils;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -208,9 +210,8 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
 
         UIUtils.hideKeyBoard(this);
 
-        String name = null;
         if (mSpinnerServices != null && mSpinnerServices.getSelectedItem() != null) {
-            name = (String) mSpinnerServices.getSelectedItem();
+            item = (String) mSpinnerServices.getSelectedItem();
         } else {
 
             UIUtils.showToast(mContext, "Please select service.");
@@ -237,16 +238,37 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
                         @Override
                         public void onResponse(String response) {
                             try {
-                                Gson gson = new Gson();
-                                Type listType = new TypeToken<List<ServiceBean>>() {
-                                }.getType();
-                                ArrayList<ServiceBean> posts = gson.fromJson(response, listType);
-                                if (posts != null && posts.size() > 0) {
+
+                                JSONObject root = new JSONObject(response);
+                                String strService = root.optString("service_id");
+                                if (strService != null) {
+
                                     hideProgressBar();
-                                    addServiceList(posts);
+                                    addServiceList();
+
+
                                 } else {
-                                    hideProgressBar();
+                                    String strStatus = root.optString("status");
+                                    String strMsg = root.optString("message");
+                                    if (strStatus.equals("Failed")) {
+
+                                        hideProgressBar();
+                                        new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
+                                                .setTitle(getString(R.string.app_name))
+                                                .setMessage("Unable to add service.")
+                                                .setCancelable(false)
+                                                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // Whatever...
+                                                        dialog.dismiss();
+                                                    }
+                                                }).show();
+
+
+                                    }
                                 }
+
                             } catch (Exception e) {
                                 hideProgressBar();
                             }
@@ -287,7 +309,7 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
         }
     }
 
-    private void addServiceList(ArrayList<ServiceBean> posts) {
+    private void addServiceList() {
 
         new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
                 .setTitle(getString(R.string.app_name))

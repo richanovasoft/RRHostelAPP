@@ -140,8 +140,8 @@ public class HomeActivity extends AppCompatActivity
 
 
             case R.id.nav_chat:
-                Intent intent2 = new Intent(HomeActivity.this, MessageActivity.class);
-                startActivity(intent2);
+               // Intent intent2 = new Intent(HomeActivity.this, MessageActivity.class);
+               // startActivity(intent2);
                 break;
 
             case R.id.nav_logout:

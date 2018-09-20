@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         mContext = getActivity();
         mMainView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ((HomeActivity) getActivity()).setTitle("R.R.Hostel");
+        ((HomeActivity) mContext).setTitle("R.R.Hostel");
 
         getAllWidgets();
         bindWidgetsWithAnEvent();

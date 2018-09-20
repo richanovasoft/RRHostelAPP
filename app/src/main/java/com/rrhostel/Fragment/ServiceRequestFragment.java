@@ -83,7 +83,6 @@ public class ServiceRequestFragment extends Fragment {
 
     private void init() {
         mProgressBarLayout = mMainView.findViewById(R.id.rl_progressBar);
-
         mRecyclerView = (RecyclerView) mMainView.findViewById(R.id.rv_service_request);
         rl_plus = mMainView.findViewById(R.id.rl_plus);
         rl_plus.setOnClickListener(new View.OnClickListener() {
@@ -192,5 +191,12 @@ public class ServiceRequestFragment extends Fragment {
             mProgressBarLayout.setVisibility(View.VISIBLE);
             mProgressBarShowing = true;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startHttpRequestForServiceRequest();
+
     }
 }

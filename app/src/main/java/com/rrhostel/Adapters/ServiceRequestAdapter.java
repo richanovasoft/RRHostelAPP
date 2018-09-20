@@ -56,7 +56,16 @@ public class ServiceRequestAdapter extends RecyclerView.Adapter<ServiceRequestAd
         holder.tv_service1.setText(curBean.getServiceList() + " (" + status + ")");
         holder.tv_service2.setText(curBean.getProblemDescription());
         holder.tv_service3.setText(curBean.getPreferDate());
-        holder.tv_service4.setText(curBean.getPreferTime());
+        if (curBean.getPreferTime() != null) {
+            holder.prefer_time.setVisibility(View.VISIBLE);
+            holder.tv_service4.setVisibility(View.VISIBLE);
+            holder.tv_service4.setText(curBean.getPreferTime());
+
+        } else {
+
+            holder.prefer_time.setVisibility(View.GONE);
+            holder.tv_service4.setVisibility(View.GONE);
+        }
 
     }
 
@@ -69,7 +78,7 @@ public class ServiceRequestAdapter extends RecyclerView.Adapter<ServiceRequestAd
         CustomRegularTextView tv_service1;
         CustomRegularTextView tv_service2;
         CustomRegularTextView tv_service3;
-        CustomRegularTextView tv_service4;
+        CustomRegularTextView tv_service4, prefer_time;
 
 
         MyViewHolder(View itemView) {
@@ -78,6 +87,7 @@ public class ServiceRequestAdapter extends RecyclerView.Adapter<ServiceRequestAd
             tv_service2 = itemView.findViewById(R.id.tv_service2);
             tv_service3 = itemView.findViewById(R.id.tv_service3);
             tv_service4 = itemView.findViewById(R.id.tv_service4);
+            prefer_time = itemView.findViewById(R.id.prefer_time);
 
         }
     }

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.rrhostel.Activity.CalenderActivity;
+import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.R;
 import com.rrhostel.Utility.CalendarView;
 
@@ -46,6 +47,7 @@ public class MyCommunityFragment extends Fragment {
 
         init();
 
+        ((HomeActivity) mContext).setTitle("My Community");
 
         return mMainView;
 

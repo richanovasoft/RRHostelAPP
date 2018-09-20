@@ -106,7 +106,7 @@ public class AndroidListAdapter extends ArrayAdapter<EventBean> {
     public class ViewHolder {
 
         CustomRegularTextView tv_event;
-        CustomRegularTextView tv_date;
+        CustomBoldTextView tv_date;
         CustomRegularTextView mTvReadMore;
 
     }
