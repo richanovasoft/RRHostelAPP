@@ -33,6 +33,7 @@ import com.rrhostel.Utility.Constant;
 import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.Utils;
 import com.rrhostel.Utility.ValidatorUtils;
+import com.rrhostel.custom.CustomEditText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private boolean mIsRequestInProgress;
     private boolean mProgressBarShowing = false;
     private RelativeLayout mProgressBarLayout;
-    private AutoCompleteTextView mEtEmail;
+    private CustomEditText mEtEmail;
 
 
     @Override

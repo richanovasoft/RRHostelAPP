@@ -1,9 +1,11 @@
 package com.rrhostel.Activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ public class HomeActivity extends AppCompatActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private CustomBoldTextView action_toolbar_name;
 
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         action_toolbar_name = toolbar.findViewById(R.id.action_toolbar_name);
 
-        action_toolbar_name.setText("Tarah");
+        action_toolbar_name.setText("");
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
@@ -140,8 +144,8 @@ public class HomeActivity extends AppCompatActivity
 
 
             case R.id.nav_chat:
-               // Intent intent2 = new Intent(HomeActivity.this, MessageActivity.class);
-               // startActivity(intent2);
+                // Intent intent2 = new Intent(HomeActivity.this, MessageActivity.class);
+                // startActivity(intent2);
                 break;
 
             case R.id.nav_logout:
@@ -234,6 +238,7 @@ public class HomeActivity extends AppCompatActivity
     public void handleNotificationButtonClick() {
         Intent intent = new Intent(this, ServiceRequestActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -247,13 +252,35 @@ public class HomeActivity extends AppCompatActivity
 
     private void showExitAlertDialog() {
 
-        if (BackCount == 1) {
-            BackCount = 0;
-            finish();
-        } else {
-            Toast.makeText(this, "Press Back again to exit.", Toast.LENGTH_SHORT).show();
-            BackCount++;
-        }
+        btnAlertDialogClicked();
+    }
+
+
+    public void btnAlertDialogClicked() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_layout_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animationdialog;
+
+
+        Button btnExit = (Button) dialog.findViewById(R.id.btn_no);
+        Button btn_yes = (Button) dialog.findViewById(R.id.btn_yes);
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        // show dialog on screen
+        dialog.show();
     }
 
     @Override
@@ -280,6 +307,26 @@ public class HomeActivity extends AppCompatActivity
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dialog != null) {
+            dialog.dismiss();
+
+            dialog = null;
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 
 }

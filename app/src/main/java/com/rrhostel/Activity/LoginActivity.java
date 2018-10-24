@@ -1,11 +1,13 @@
 package com.rrhostel.Activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -91,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     String Database_Path = "All_UserName_Database";
 
+    private  Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         changeStatusBarColor();
         mContext = this;
 
+        displayFirebaseRegId();
 
         mEmailView = findViewById(R.id.email);
         ll_forgot = findViewById(R.id.ll_forgot);
@@ -162,7 +167,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        displayFirebaseRegId();
 
     }
 
@@ -285,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }).show();
 
 */
-                                setEmailIntegration(mEmailView.getText().toString(), "novasoft@12345",loginResponseData);
+                                setEmailIntegration(mEmailView.getText().toString(), "novasoft@12345", loginResponseData);
 
 
                             } catch (Exception e) {
@@ -398,7 +402,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
 
             //API used for get user info
-            loginSuccessfully(loginResponseData,user.getUid());
+            loginSuccessfully(loginResponseData, user.getUid());
 
 
         } else {
@@ -467,7 +471,7 @@ public class LoginActivity extends AppCompatActivity {
                                         hideProgressBar();
 
 
-                                        setEmailIntegrationUsingFireBase(mEmailView.getText().toString(), "novasoft@12345",loginResponseData);
+                                        setEmailIntegrationUsingFireBase(mEmailView.getText().toString(), "novasoft@12345", loginResponseData);
 
 
                                     } else {
@@ -591,19 +595,37 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        showExitAlertDialog();
+        btnAlertDialogClicked();
     }
 
     //Userd for Exit application.
-    private void showExitAlertDialog() {
-        if (BackCount == Constant.APPLICATION_BACK_EXIT_COUNT) {
-            BackCount = Constant.APPLICATION_BACK_COUNT;
-            finish();
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.backCountMsg), Toast.LENGTH_SHORT).show();
-            BackCount++;
-        }
+
+    public void btnAlertDialogClicked() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_layout_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animationdialog;
+
+        Button btnExit = (Button) dialog.findViewById(R.id.btn_no);
+        Button btn_yes = (Button) dialog.findViewById(R.id.btn_yes);
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        // show dialog on screen
+        dialog.show();
     }
+
 
     @Override
     protected void onResume() {
@@ -628,5 +650,24 @@ public class LoginActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dialog != null) {
+            dialog.dismiss();
+
+            dialog = null;
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
 }
 

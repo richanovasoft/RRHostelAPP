@@ -9,6 +9,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
 
+    <color name="statusBarColor">#D20B27</color>
 
     <color name="green">#41a073</color>
     <color name="colorIndivateTab">#FFFFFF</color>

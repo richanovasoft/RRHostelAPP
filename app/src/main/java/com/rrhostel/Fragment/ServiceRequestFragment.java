@@ -89,7 +89,7 @@ public class ServiceRequestFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ServiceRequestFromActivity.class);
-                startActivity(intent);
+                mContext.startActivity(intent);
             }
         });
         mServiceList = new ArrayList<>();

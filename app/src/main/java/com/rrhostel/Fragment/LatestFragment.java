@@ -1,7 +1,9 @@
 package com.rrhostel.Fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -31,6 +33,7 @@ import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
 import com.rrhostel.custom.CustomBoldTextView;
+import com.rrhostel.custom.CustomRegularTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +55,7 @@ public class LatestFragment extends Fragment {
     private String mStrMeal;
     private Button btn_submit;
     String formattedDate;
+    private Dialog dialog;
 
     public LatestFragment() {
         // Required empty public constructor
@@ -113,7 +117,6 @@ public class LatestFragment extends Fragment {
             public void onClick(View v) {
                 if (cb_lunch.isChecked()) {
                     mStrMeal = cb_lunch.getText().toString();
-
                 }
 
             }
@@ -126,9 +129,7 @@ public class LatestFragment extends Fragment {
             public void onClick(View v) {
                 if (cb_dinner.isChecked()) {
                     mStrMeal = cb_dinner.getText().toString();
-
                 }
-
             }
         });
 
@@ -174,9 +175,7 @@ public class LatestFragment extends Fragment {
                                 StatusBean statusBean = gson.fromJson(jsonResp, StatusBean.class);
                                 if (statusBean != null && statusBean.getStatus().equals("Success")) {
                                     hideProgressBar();
-                                    cb_breakfast.setChecked(false);
-                                    cb_lunch.setChecked(false);
-                                    cb_dinner.setChecked(false);
+                                    btnAlertDialogClicked();
 
                                 } else {
                                     hideProgressBar();
@@ -220,6 +219,34 @@ public class LatestFragment extends Fragment {
         } else {
             UIUtils.showToast(mContext, getResources().getString(R.string.InternetErrorMsg));
         }
+    }
+
+
+    public void btnAlertDialogClicked() {
+        dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.custom_layout_dialog_meal);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animationdialog;
+
+        CustomRegularTextView custom_text_view1 = dialog.findViewById(R.id.custom_text_view1);
+        CustomRegularTextView custom_text_view = dialog.findViewById(R.id.custom_text_view);
+        custom_text_view1.setText("Enjoy your meal.");
+        custom_text_view.setText("Meal");
+
+        Button btn_yes = (Button) dialog.findViewById(R.id.btn_yes);
+
+
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                cb_breakfast.setChecked(false);
+                cb_lunch.setChecked(false);
+                cb_dinner.setChecked(false);
+            }
+        });
+        // show dialog on screen
+        dialog.show();
     }
 
     private void startHttpRequestForHomeNotifcation() {
@@ -281,6 +308,27 @@ public class LatestFragment extends Fragment {
         if (!mProgressBarShowing) {
             mProgressBarLayout.setVisibility(View.VISIBLE);
             mProgressBarShowing = true;
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dialog != null) {
+            dialog.dismiss();
+
+            dialog = null;
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 }

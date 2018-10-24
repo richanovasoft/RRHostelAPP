@@ -2,6 +2,8 @@ package com.rrhostel.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.R;
@@ -65,6 +68,14 @@ public class HomeFragment extends Fragment {
         fragmentTwo = new ServiceRequestFragment();
         allTabs.addTab(allTabs.newTab().setText(getResources().getString(R.string.LatestText)), true);
         allTabs.addTab(allTabs.newTab().setText(getResources().getString(R.string.ServiceRequestText)), false);
+
+        LinearLayout linearLayout = (LinearLayout)allTabs.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.WHITE);
+        drawable.setSize(2, 50);
+        linearLayout.setDividerPadding(5);
+        linearLayout.setDividerDrawable(drawable);
     }
 
     private void bindWidgetsWithAnEvent() {
@@ -105,6 +116,8 @@ public class HomeFragment extends Fragment {
             ft.commit();
         }
     }
+
+
 
 
 }

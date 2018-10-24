@@ -1,11 +1,13 @@
 package com.rrhostel.Activity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +45,7 @@ import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
 import com.rrhostel.Utility.ValidatorUtils;
+import com.rrhostel.custom.CustomRegularTextView;
 
 import org.json.JSONObject;
 
@@ -69,6 +72,7 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
     private boolean mProgressBarShowing = false;
     private RelativeLayout mProgressBarLayout;
     private String item;
+    private Dialog dialog;
 
 
     @Override
@@ -290,10 +294,10 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
                 public Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String, String> params = new HashMap<>();
                     params.put("userId", UserUtils.getInstance().getUserID(mContext));
-                    params.put("serviceList ", item);
+                    params.put("serviceList", item);
                     params.put("problemDescription", et_problem_description.getText().toString());
                     params.put("preferDate", et_prefer_date.getText().toString());
-                    params.put("preferTime ", et_prefer_time.getText().toString());
+                    params.put("preferTime", et_prefer_time.getText().toString());
                     return params;
                 }
             };
@@ -309,22 +313,33 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
         }
     }
 
-    private void addServiceList() {
 
-        new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle)
-                .setTitle(getString(R.string.app_name))
-                .setMessage("Successfully added your service list.")
-                .setCancelable(false)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent(mContext, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+    public void addServiceList() {
+        dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.custom_layout_dialog_meal);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animationdialog;
 
-                    }
-                }).show();
+        CustomRegularTextView custom_text_view1 = dialog.findViewById(R.id.custom_text_view1);
+        CustomRegularTextView custom_text_view = dialog.findViewById(R.id.custom_text_view);
+        custom_text_view1.setText("Successfully added your service list.");
+        custom_text_view.setText("Service List");
+
+        Button btn_yes = (Button) dialog.findViewById(R.id.btn_yes);
+
+
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(mContext, HomeActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+        // show dialog on screen
+        dialog.show();
     }
 
     private void timePicker() {
@@ -413,6 +428,26 @@ public class ServiceRequestFromActivity extends AppCompatActivity implements Ada
         if (!mProgressBarShowing) {
             mProgressBarLayout.setVisibility(View.VISIBLE);
             mProgressBarShowing = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dialog != null) {
+            dialog.dismiss();
+
+            dialog = null;
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 

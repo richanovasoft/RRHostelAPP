@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@color/colorWhite">
+
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_exit"
+        android:tint="@color/blue" />
+
+    <com.rrhostel.custom.CustomRegularTextView
+        android:id="@+id/custom_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_icon"
+        android:layout_marginTop="2dp"
+        android:text="@string/ExitText"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />
+
+    <com.rrhostel.custom.CustomRegularTextView
+        android:id="@+id/custom_text_view1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_text_view"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/ExitMsg"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_text_view1"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/round_corner_shape_grey"
+            android:gravity="center"
+
+            android:text="No"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/round_corner_shape_red"
+            android:gravity="center"
+            android:text="Yes"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

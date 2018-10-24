@@ -14,6 +14,9 @@ public class StatusBean {
     @SerializedName("New Password")
     private String mNewPassword;
 
+    @SerializedName("path")
+    private String mStrpath;
+
     public String getMessage() {
         return mMessage;
     }
@@ -37,5 +40,14 @@ public class StatusBean {
 
     public void setmNewPassword(String mNewPassword) {
         this.mNewPassword = mNewPassword;
+    }
+
+
+    public String getmStrpath() {
+        return mStrpath;
+    }
+
+    public void setmStrpath(String mStrpath) {
+        this.mStrpath = mStrpath;
     }
 }

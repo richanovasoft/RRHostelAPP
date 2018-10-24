@@ -55,11 +55,37 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_personal"
-                            android:layout_marginBottom="20dp"
+                            android:layout_marginTop="10dp"
                             android:orientation="vertical"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="20dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/civ_profile"
+                                    android:layout_width="80dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_user_profile" />
+
+                                <ImageView
+                                    android:id="@+id/img_edit_profile"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="end"
+                                    android:src="@android:drawable/ic_menu_edit" />
+
+
+                            </LinearLayout>
 
                             <android.support.design.widget.TextInputLayout
                                 android:layout_width="match_parent"

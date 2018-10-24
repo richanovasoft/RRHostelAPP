@@ -11,6 +11,13 @@ public class Constant {
 
     public static final int SPLASH_TIME_OUT = 3 * 1000;
 
+    public static final int MY_PERMISSIONS_REQUEST_FOR_EXTERNAL_STORAGE = 2000;
+    public static final int GALLERY_CAPTURE_IMAGE_REQUEST_CODE = 12452;
+    public static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 1337;
+    public static final int MAX_UPLOAD_FILE_SIZE = 5;
+
+
+
     //======================Shared Preference ======================
     public static final String PREF_USER_LOGGED_IN = "user_login";
     public static final String PREF_USER_ID = "user_id";
@@ -111,5 +118,11 @@ public class Constant {
 
     private static final String EVENT_LIST = "/eventApi.php";
     public static final String API_EVENT_LIST = API_BASE_URL + EVENT_LIST;
+
+
+
+    private static final String UPDATE_IMAGE = "/profile_image.php";
+    public static final String API_UPDATE_IMAGE = API_BASE_URL + UPDATE_IMAGE;
+
 
 }

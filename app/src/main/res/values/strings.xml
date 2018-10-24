@@ -39,6 +39,14 @@
     <string name="backCountMsg">Press Back again to exit.</string>
 
     <string name="CreateAccountText">CREATE AN ACCOUNT</string>
+    <string name="PermissionDeniedTitle">Permission denied</string>
+    <string name="PermissionDeniedMsg">Without this permission the app is unable to able register you. Are yout sure want to deny this permission?</string>
+    <string name="PermissionDeniedRetryTxt">Re-try</string>
+    <string name="PermissionDeniedSureTxt">I\'m sure</string>
+    <string name="PermissionGoSettingTitle">Go settings</string>
+    <string name="PermissionGoSettingMsg">To help you to use this app, access to your External storage. Tap settings > permissions, and turn Gallery Images.</string>
+    <string name="PermissionGoSettingTxt">SETTINGS</string>
+    <string name="PermissionDeniedMsgForLogin">Without this permission the app is unable to able login you. Are yout sure want to deny this permission?</string>
 
     <string name="skip">Skip</string>
 
@@ -48,6 +56,11 @@
     <string name="facebook">facebook</string>
 
     <string name="google">google</string>
+
+
+    <string name="ExitText">Exit</string>
+    <string name="ExitMsg">Are you sure,you want to exit from the application?</string>
+    <string name="ExitMsg1">You will be redirected on the Login Screen.</string>
 
     <string name="FrgotPasswordText">Forgot Password</string>
     <string name="title_activity_home">HomeActivity</string>

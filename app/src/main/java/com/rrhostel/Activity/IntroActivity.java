@@ -79,7 +79,7 @@ public class IntroActivity extends AppCompatActivity {
         mDotsLayout.removeAllViews();
         for (int i = 0; i < mDots.length; i++) {
             mDots[i] = new ImageView(this);
-            mDots[i].setBackgroundResource(R.drawable.ic_intro_white);
+            mDots[i].setBackgroundResource(R.drawable.ic_intro_white_new);
             mDotsLayout.addView(mDots[i]);
             if (i != mDots.length - 1) {
                 ImageView hiddenDotIv = new ImageView(this);
@@ -89,7 +89,7 @@ public class IntroActivity extends AppCompatActivity {
             }
         }
         if (mDots.length > 0)
-            mDots[currentPage].setBackgroundResource(R.drawable.ic_intro_blue);
+            mDots[currentPage].setBackgroundResource(R.drawable.ic_intro_blue_new);
     }
 
 
@@ -161,7 +161,6 @@ public class IntroActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
-
 
 
     private void changeStatusBarColor() {

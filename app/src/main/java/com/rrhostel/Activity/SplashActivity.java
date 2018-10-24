@@ -38,13 +38,12 @@ public class SplashActivity extends AppCompatActivity {
 
     private void handleSplashTimeout() {
 
-        gotoMain();
 
-
-        /*if (CheckingPermissionIsEnabledOrNot()) {
+        if (CheckingPermissionIsEnabledOrNot()) {
+            gotoMain();
         } else {
             RequestMultiplePermission();
-        }*/
+        }
     }
 
     private void gotoMain() {
@@ -74,8 +73,8 @@ public class SplashActivity extends AppCompatActivity {
 
     public boolean CheckingPermissionIsEnabledOrNot() {
 
-        int ForthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CALENDAR);
-        int FifthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CALENDAR);
+        int ForthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int FifthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE);
 
         return ForthPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
@@ -86,8 +85,8 @@ public class SplashActivity extends AppCompatActivity {
 
         // Creating String Array with Permissions.
         ActivityCompat.requestPermissions(SplashActivity.this, new String[]{
-                Manifest.permission.READ_CALENDAR,
-                Manifest.permission.WRITE_CALENDAR,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
         }, RequestPermissionCode);
 
     }
@@ -104,7 +103,7 @@ public class SplashActivity extends AppCompatActivity {
                     boolean GetAccountsPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean GetLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
-                    if ( GetAccountsPermission && GetLocation) {
+                    if (GetAccountsPermission && GetLocation) {
 
                         gotoMain();
                     } else {
