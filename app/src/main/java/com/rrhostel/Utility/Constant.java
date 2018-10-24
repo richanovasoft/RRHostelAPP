@@ -125,4 +125,7 @@ public class Constant {
     public static final String API_UPDATE_IMAGE = API_BASE_URL + UPDATE_IMAGE;
 
 
+
+    private static final String USER_INFO = "/user_info.php";
+    public static final String API_USER_INFO = API_BASE_URL + USER_INFO;
 }

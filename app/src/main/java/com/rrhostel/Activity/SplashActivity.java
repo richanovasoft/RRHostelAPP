@@ -10,9 +10,25 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.rrhostel.Bean.LoginResponce;
 import com.rrhostel.R;
+import com.rrhostel.Utility.AppController;
 import com.rrhostel.Utility.Constant;
 import com.rrhostel.Utility.StorageUtils;
+import com.rrhostel.Utility.UserUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -34,6 +50,11 @@ public class SplashActivity extends AppCompatActivity {
                 handleSplashTimeout();
             }
         }, Constant.SPLASH_TIME_OUT);
+
+        boolean loggedIn = StorageUtils.getPrefForBool(mContext, Constant.PREF_USER_LOGGED_IN);
+        if (loggedIn) {
+            startHttpRequestForUserInfo();
+        }
     }
 
     private void handleSplashTimeout() {
@@ -113,6 +134,52 @@ public class SplashActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+
+    public void startHttpRequestForUserInfo() {
+        String baseUrl = Constant.API_USER_INFO;
+        StringRequest mStrRequest = new StringRequest(Request.Method.GET, baseUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            Gson gson = new GsonBuilder().create();
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject jsonResp = jsonParser.parse(response).getAsJsonObject();
+                            LoginResponce loginResponseData = gson.fromJson(jsonResp, LoginResponce.class);
+                            if (loginResponseData != null) {
+                                UserUtils.getInstance().saveUserInfo(mContext, loginResponseData);
+
+                            } else {
+                                // UIUtils.showToast(mContext, getString(R.string.ErrorMsg));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("userid", UserUtils.getInstance().getUserID(mContext));
+                return params;
+            }
+        };
+        mStrRequest.setShouldCache(false);
+        mStrRequest.setTag("");
+        AppController.getInstance().addToRequestQueue(mStrRequest);
+        mStrRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 
 }
