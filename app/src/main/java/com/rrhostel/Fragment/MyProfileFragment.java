@@ -167,6 +167,23 @@ public class MyProfileFragment extends Fragment {
         }
 
 
+        if (loginResponce.getRelativeName() != null && loginResponce.getRelativeEmail() != null && loginResponce.getRelationship() != null && loginResponce.getRelativePhone() != null) {
+
+
+            name_emergency.setText(loginResponce.getRelativeName());
+            relationship.setText(loginResponce.getRelationship());
+            mobile_no_emergency.setText(loginResponce.getRelativePhone());
+            email_emergency.setText(loginResponce.getRelativeEmail());
+        }
+
+        if (loginResponce.getImg() != null) {
+            String strFullPath = "http://portal.rrhostel.in/img/" + loginResponce.getImg();
+            Picasso.with(mContext).load(strFullPath).placeholder(R.drawable.ic_user_profile).into(civ_profile);
+        } else {
+            civ_profile.setImageResource(R.drawable.ic_user_profile);
+        }
+
+
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +198,8 @@ public class MyProfileFragment extends Fragment {
                 setValidationForRelatives();
             }
         });
+
+
 
     }
 
@@ -483,6 +502,8 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void loginSuccessfully(LoginResponce aLoginResponseObj) {
+        //startHttpRequestForUserInfo();
+
         UserUtils.getInstance().setUserLoggedIn(mContext, true);
         UserUtils.getInstance().saveUserInfo(mContext, aLoginResponseObj);
         UserUtils.getInstance().setUserId(mContext, aLoginResponseObj.getUserId());
@@ -496,14 +517,10 @@ public class MyProfileFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // Whatever...
                         dialog.dismiss();
-                        Intent intent = new Intent(mContext, HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
 
                     }
                 }).show();
     }
-
 
     private void hideProgressBar() {
         mIsRequestInProgress = false;
@@ -718,8 +735,10 @@ public class MyProfileFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 mStrUpdateProfileUrl = data.getData();
                 if (mStrUpdateProfileUrl != null) {
-                    CropImage.activity(data.getData())
-                            .start(getActivity());
+                    setImagePath(mStrUpdateProfileUrl);
+
+                    /*CropImage.activity(data.getData())
+                            .start(getActivity());*/
                 }
             }
         }
@@ -787,10 +806,11 @@ public class MyProfileFragment extends Fragment {
                         JsonParser jsonParser = new JsonParser();
                         JsonObject jsonResp = jsonParser.parse(resultResponse).getAsJsonObject();
                         StatusBean responseBean = gson.fromJson(jsonResp, StatusBean.class);
-                        if (responseBean != null ) {
+                        if (responseBean != null && responseBean.getMessage().equals("true")) {
                             hideProgressBar();
 
-                            setImageBitmap(responseBean.getmStrpath());
+
+                            startHttpRequestForUserInfoNew();
 
 
                         } else {
@@ -803,7 +823,6 @@ public class MyProfileFragment extends Fragment {
                     } catch (Exception e) {
                         hideProgressBar();
                         civ_profile.setImageResource(R.drawable.ic_user_profile);
-
                     }
                 }
 
@@ -826,7 +845,7 @@ public class MyProfileFragment extends Fragment {
                     Map<String, DataPart> params = new HashMap<>();
                     // file name could found file base or direct access from real path
                     // for now just get bitmap data from ImageView
-                    params.put("avatar", new DataPart(mSelectedFilePath.substring(mSelectedFilePath.lastIndexOf("/") + 1),
+                    params.put("file", new DataPart(mSelectedFilePath.substring(mSelectedFilePath.lastIndexOf("/") + 1),
                             AppHelper.readBytesFromFile(mSelectedFilePath)));
                     return params;
                 }
@@ -835,7 +854,7 @@ public class MyProfileFragment extends Fragment {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("userid", "" + UserUtils.getInstance().getUserID(mContext));
+                    params.put("user_id", "" + UserUtils.getInstance().getUserID(mContext));
                     return params;
                 }
             };
@@ -851,13 +870,61 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void setImageBitmap(String aUserProfile) {
-        if (aUserProfile != null) {
 
-            Picasso.with(mContext).load(aUserProfile).placeholder(R.drawable.ic_user_profile).into(civ_profile);
-        } else {
+        String strFullPath = "http://portal.rrhostel.in/img/" + aUserProfile;
+        Picasso.with(mContext).load(strFullPath).placeholder(R.drawable.ic_user_profile).into(civ_profile);
+    }
 
-            civ_profile.setImageResource(R.drawable.ic_user_profile);
-        }
+
+    public void startHttpRequestForUserInfoNew() {
+        showProgressBar();
+        String baseUrl = Constant.API_USER_INFO;
+        StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            Gson gson = new GsonBuilder().create();
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject jsonResp = jsonParser.parse(response).getAsJsonObject();
+                            LoginResponce loginResponseData = gson.fromJson(jsonResp, LoginResponce.class);
+                            if (loginResponseData != null) {
+                                hideProgressBar();
+                                UserUtils.getInstance().saveUserInfo(mContext, loginResponseData);
+                                setImageBitmap(loginResponseData.getImg());
+
+
+                            } else {
+                                hideProgressBar();
+                                // UIUtils.showToast(mContext, getString(R.string.ErrorMsg));
+                            }
+                        } catch (Exception e) {
+                            hideProgressBar();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressBar();
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", UserUtils.getInstance().getUserID(mContext));
+                return params;
+            }
+        };
+        mStrRequest.setShouldCache(false);
+        mStrRequest.setTag("");
+        AppController.getInstance().addToRequestQueue(mStrRequest);
+        mStrRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
     }
 

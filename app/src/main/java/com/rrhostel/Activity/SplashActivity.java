@@ -96,9 +96,11 @@ public class SplashActivity extends AppCompatActivity {
 
         int ForthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int FifthPermissionResult = ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int FifthPermissionResult1 = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA);
 
         return ForthPermissionResult == PackageManager.PERMISSION_GRANTED &&
-                FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
+                FifthPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                FifthPermissionResult1 == PackageManager.PERMISSION_GRANTED;
     }
 
 
@@ -108,6 +110,7 @@ public class SplashActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(SplashActivity.this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
         }, RequestPermissionCode);
 
     }
@@ -123,8 +126,9 @@ public class SplashActivity extends AppCompatActivity {
 
                     boolean GetAccountsPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean GetLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean GetLocation11 = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                    if (GetAccountsPermission && GetLocation) {
+                    if (GetAccountsPermission && GetLocation && GetLocation11) {
 
                         gotoMain();
                     } else {
@@ -139,7 +143,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void startHttpRequestForUserInfo() {
         String baseUrl = Constant.API_USER_INFO;
-        StringRequest mStrRequest = new StringRequest(Request.Method.GET, baseUrl,
+        StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -166,9 +170,9 @@ public class SplashActivity extends AppCompatActivity {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("userid", UserUtils.getInstance().getUserID(mContext));
+                params.put("user_id", UserUtils.getInstance().getUserID(mContext));
                 return params;
             }
         };

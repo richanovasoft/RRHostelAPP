@@ -25,6 +25,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rrhostel.Bean.HomeNotificationBean;
+import com.rrhostel.Bean.LoginResponce;
+import com.rrhostel.Bean.SelectedMealBean;
+import com.rrhostel.Bean.SelectedMealBeanResponse;
 import com.rrhostel.Bean.StatusBean;
 import com.rrhostel.R;
 import com.rrhostel.Utility.AppController;
@@ -36,6 +39,7 @@ import com.rrhostel.custom.CustomBoldTextView;
 import com.rrhostel.custom.CustomRegularTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,7 +56,7 @@ public class LatestFragment extends Fragment {
     private RelativeLayout mProgressBarLayout;
     private CheckBox cb_breakfast, cb_lunch, cb_dinner;
 
-    private String mStrMeal;
+    private String mStrMeal, mStrMeal1, mStrMea2, mStrMea3;
     private Button btn_submit;
     String formattedDate;
     private Dialog dialog;
@@ -92,9 +96,8 @@ public class LatestFragment extends Fragment {
 
         mTvNotification = mMainView.findViewById(R.id.tv_notification);
 
-
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         formattedDate = df.format(c);
 
 
@@ -151,6 +154,7 @@ public class LatestFragment extends Fragment {
         if (internetAvailable) {
 
             startHttpRequestForHomeNotifcation();
+            startHttpRequestForSelectedMeal();
         } else {
             UIUtils.showToast(mContext, getResources().getString(R.string.InternetErrorMsg));
         }
@@ -175,6 +179,7 @@ public class LatestFragment extends Fragment {
                                 StatusBean statusBean = gson.fromJson(jsonResp, StatusBean.class);
                                 if (statusBean != null && statusBean.getStatus().equals("Success")) {
                                     hideProgressBar();
+
                                     btnAlertDialogClicked();
 
                                 } else {
@@ -197,7 +202,6 @@ public class LatestFragment extends Fragment {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             hideProgressBar();
-
                         }
                     }) {
                 @Override
@@ -240,9 +244,9 @@ public class LatestFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                cb_breakfast.setChecked(false);
-                cb_lunch.setChecked(false);
-                cb_dinner.setChecked(false);
+
+                startHttpRequestForSelectedMeal();
+
             }
         });
         // show dialog on screen
@@ -296,6 +300,88 @@ public class LatestFragment extends Fragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
+
+    public void startHttpRequestForSelectedMeal() {
+        showProgressBar();
+        String baseUrl = Constant.API_SELECTED_MEAL;
+        StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            Gson gson = new GsonBuilder().create();
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject jsonResp = jsonParser.parse(response).getAsJsonObject();
+                            SelectedMealBeanResponse selectedMealBeanResponse = gson.fromJson(jsonResp, SelectedMealBeanResponse.class);
+                            if (selectedMealBeanResponse != null && selectedMealBeanResponse.getData().size() > 0) {
+
+                                hideProgressBar();
+                                setChecked(selectedMealBeanResponse.getData());
+
+                            } else {
+                                hideProgressBar();
+                                cb_breakfast.setChecked(false);
+                                cb_lunch.setChecked(false);
+                                cb_dinner.setChecked(false);
+                            }
+                        } catch (Exception e) {
+                            hideProgressBar();
+                            cb_breakfast.setChecked(false);
+                            cb_lunch.setChecked(false);
+                            cb_dinner.setChecked(false);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", UserUtils.getInstance().getUserID(mContext));
+                params.put("today_date", formattedDate);
+                return params;
+            }
+        };
+        mStrRequest.setShouldCache(false);
+        mStrRequest.setTag("");
+        AppController.getInstance().addToRequestQueue(mStrRequest);
+        mStrRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+    }
+
+    private void setChecked(ArrayList<SelectedMealBean> data) {
+
+
+        for (int i = 0; i < data.size(); i++) {
+            SelectedMealBean selectedMealBean = data.get(i);
+            mStrMeal = cb_breakfast.getText().toString();
+            mStrMea2 = cb_lunch.getText().toString();
+            mStrMea3 = cb_dinner.getText().toString();
+
+            if (mStrMeal.equals(selectedMealBean.getMeal())) {
+
+                cb_breakfast.setChecked(true);
+            } else if (mStrMea2.equals(selectedMealBean.getMeal())) {
+                cb_lunch.setChecked(true);
+            } else if (mStrMea3.equals(selectedMealBean.getMeal())) {
+                cb_dinner.setChecked(true);
+            } else {
+                cb_breakfast.setChecked(false);
+                cb_lunch.setChecked(false);
+                cb_dinner.setChecked(false);
+            }
+        }
+
+    }
+
     private void hideProgressBar() {
         mIsRequestInProgress = false;
         if (mProgressBarShowing) {
@@ -317,7 +403,6 @@ public class LatestFragment extends Fragment {
         super.onDestroy();
         if (dialog != null) {
             dialog.dismiss();
-
             dialog = null;
 
         }

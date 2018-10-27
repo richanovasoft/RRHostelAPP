@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rrhostel.custom.CustomRegularTextView;
 
 import org.json.JSONObject;
 
@@ -82,8 +84,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean mProgressBarShowing = false;
     private RelativeLayout mProgressBarLayout;
 
-    private int BackCount = Constant.APPLICATION_BACK_COUNT;
-
     private String android_id, refreshedToken;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -93,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     String Database_Path = "All_UserName_Database";
 
-    private  Dialog dialog;
+    private Dialog dialog;
+    private CustomRegularTextView tv_forgot_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mEmailView = findViewById(R.id.email);
         ll_forgot = findViewById(R.id.ll_forgot);
+        tv_forgot_password = findViewById(R.id.tv_forgot_password);
+        tv_forgot_password.setPaintFlags(tv_forgot_password.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

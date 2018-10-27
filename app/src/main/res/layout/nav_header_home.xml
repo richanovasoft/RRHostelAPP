@@ -11,14 +11,22 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/ic_user_profile" />
-
+        android:src="@drawable/ic_user_profile" />
+    <!-- <ImageView
+         android:id="@+id/imageView"
+         android:layout_width="60dp"
+         android:layout_height="60dp"
+         android:contentDescription="@string/nav_header_desc"
+         android:paddingTop="@dimen/nav_header_vertical_spacing"
+         app:srcCompat="@drawable/ic_user_profile" />
+ -->
     <com.rrhostel.custom.CustomBoldTextView
         android:id="@+id/tv_username"
         android:layout_width="match_parent"

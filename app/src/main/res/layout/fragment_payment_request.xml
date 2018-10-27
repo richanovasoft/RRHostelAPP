@@ -43,7 +43,8 @@
             android:orientation="horizontal">
 
 
-            <TextView
+            <com.rrhostel.custom.CustomRegularTextView
+                android:id="@+id/tv_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -58,7 +59,7 @@
                 android:textStyle="bold" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_add_my_album_listing"
+                android:id="@+id/fab_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"

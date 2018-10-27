@@ -121,11 +121,15 @@ public class Constant {
 
 
 
-    private static final String UPDATE_IMAGE = "/profile_image.php";
+    private static final String UPDATE_IMAGE = "/imgUpload.php";
     public static final String API_UPDATE_IMAGE = API_BASE_URL + UPDATE_IMAGE;
 
 
 
-    private static final String USER_INFO = "/user_info.php";
+    private static final String USER_INFO = "/userDetail.php";
     public static final String API_USER_INFO = API_BASE_URL + USER_INFO;
+
+
+    private static final String SELECTED_MEAL = "/mealDetailById.php";
+    public static final String API_SELECTED_MEAL = API_BASE_URL + SELECTED_MEAL;
 }

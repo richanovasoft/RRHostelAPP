@@ -63,6 +63,9 @@ public class LoginResponce {
     @SerializedName("deviceId")
     private String deviceId;
 
+    @SerializedName("img")
+    private String img;
+
     public String getAddress() {
         return mAddress;
     }
@@ -214,5 +217,14 @@ public class LoginResponce {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

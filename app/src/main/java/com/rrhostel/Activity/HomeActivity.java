@@ -23,6 +23,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rrhostel.Bean.LoginResponce;
 import com.rrhostel.Chat.MessageActivity;
 import com.rrhostel.Fragment.HomeFragment;
@@ -30,15 +40,20 @@ import com.rrhostel.Fragment.MyCommunityFragment;
 import com.rrhostel.Fragment.MyProfileFragment;
 import com.rrhostel.Fragment.PaymentRequestFragment;
 import com.rrhostel.R;
+import com.rrhostel.Utility.AppController;
 import com.rrhostel.Utility.Constant;
 import com.rrhostel.Utility.StorageUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.custom.CustomBoldTextView;
 import com.rrhostel.custom.CustomRegularTextView;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private int BackCount = 0;
+
 
     DrawerLayout drawer;
 
@@ -79,17 +94,28 @@ public class HomeActivity extends AppCompatActivity
 
         LoginResponce loginResponce = UserUtils.getInstance().getUserInfo(HomeActivity.this);
 
-        if (loginResponce.getFullName() != null && loginResponce.getEmail() != null) {
-
+        if (loginResponce.getFullName() != null) {
             mEtName.setText(loginResponce.getFullName());
+
+        } else {
+            mEtName.setVisibility(View.GONE);
+
+        }
+
+        if (loginResponce.getEmail() != null) {
             mEtEmail.setText(loginResponce.getEmail());
 
         } else {
-
-            mEtName.setVisibility(View.GONE);
             mEtEmail.setVisibility(View.GONE);
-        }
 
+        }
+        if (loginResponce.getImg() != null) {
+
+            String strFullPath = "http://portal.rrhostel.in/img/" + loginResponce.getImg();
+            Picasso.with(HomeActivity.this).load(strFullPath).placeholder(R.drawable.ic_user_profile).into(mImgUserProfile);
+        } else {
+            mImgUserProfile.setImageResource(R.drawable.ic_user_profile);
+        }
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -113,6 +139,8 @@ public class HomeActivity extends AppCompatActivity
 
 
         displaySelectedScreen(R.id.nav_home);
+
+        //startHttpRequestForUserInfo();
     }
 
     private void displaySelectedScreen(int nav_home) {
@@ -327,6 +355,52 @@ public class HomeActivity extends AppCompatActivity
             dialog.dismiss();
             dialog = null;
         }
+    }
+
+
+    public void startHttpRequestForUserInfo() {
+        String baseUrl = Constant.API_USER_INFO;
+        StringRequest mStrRequest = new StringRequest(Request.Method.POST, baseUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            Gson gson = new GsonBuilder().create();
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject jsonResp = jsonParser.parse(response).getAsJsonObject();
+                            LoginResponce loginResponseData = gson.fromJson(jsonResp, LoginResponce.class);
+                            if (loginResponseData != null) {
+                                UserUtils.getInstance().saveUserInfo(HomeActivity.this, loginResponseData);
+
+                            } else {
+                                // UIUtils.showToast(mContext, getString(R.string.ErrorMsg));
+                            }
+                        } catch (Exception e) {
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", UserUtils.getInstance().getUserID(HomeActivity.this));
+                return params;
+            }
+        };
+        mStrRequest.setShouldCache(false);
+        mStrRequest.setTag("");
+        AppController.getInstance().addToRequestQueue(mStrRequest);
+        mStrRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 
 }

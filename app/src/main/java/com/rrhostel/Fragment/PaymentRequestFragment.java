@@ -2,8 +2,10 @@ package com.rrhostel.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,14 +26,17 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rrhostel.Activity.HomeActivity;
 import com.rrhostel.Adapters.PaymentRequestAdapter;
+import com.rrhostel.Bean.LoginResponce;
 import com.rrhostel.Bean.PaymentBean;
 import com.rrhostel.Bean.ServiceBean;
 import com.rrhostel.R;
 import com.rrhostel.Utility.AppController;
 import com.rrhostel.Utility.Constant;
+import com.rrhostel.Utility.PayMentGateWay;
 import com.rrhostel.Utility.UIUtils;
 import com.rrhostel.Utility.UserUtils;
 import com.rrhostel.Utility.Utils;
+import com.rrhostel.custom.CustomRegularTextView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -51,6 +56,9 @@ public class PaymentRequestFragment extends Fragment {
     private boolean mProgressBarShowing = false;
     private RelativeLayout mProgressBarLayout;
 
+
+    private FloatingActionButton fab_pay;
+    private CustomRegularTextView tvPay;
 
     public PaymentRequestFragment() {
         // Required empty public constructor
@@ -82,6 +90,37 @@ public class PaymentRequestFragment extends Fragment {
         mRecyclerView = (RecyclerView) mMainView.findViewById(R.id.rv_payment_request);
         mServiceList = new ArrayList<>();
         mProgressBarLayout = mMainView.findViewById(R.id.rl_progressBar);
+        tvPay = mMainView.findViewById(R.id.tv_pay);
+        fab_pay = mMainView.findViewById(R.id.fab_pay);
+
+        final LoginResponce loginResponce = UserUtils.getInstance().getUserInfo(mContext);
+
+
+        tvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext, PayMentGateWay.class);
+                intent.putExtra("FIRST_NAME", loginResponce.getFullName());
+                intent.putExtra("PHONE_NUMBER", loginResponce.getPhone());
+                intent.putExtra("EMAIL_ADDRESS", loginResponce.getEmail());
+                intent.putExtra("RECHARGE_AMT", "2000");
+                startActivity(intent);
+            }
+        });
+
+        fab_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PayMentGateWay.class);
+                intent.putExtra("FIRST_NAME", loginResponce.getFullName());
+                intent.putExtra("PHONE_NUMBER", loginResponce.getPhone());
+                intent.putExtra("EMAIL_ADDRESS", loginResponce.getEmail());
+                intent.putExtra("RECHARGE_AMT", "2000");
+                startActivity(intent);
+            }
+        });
+
 
         startHttpRequestForPaymentRequest();
     }
